@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Order Confirmed #{{ order.id }} | ClothStore{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb Start -->
+<div class="breadcrumb-wrapper py-3" style="background: var(--bg-subtle, #f5f5f7); border-bottom: 1px solid var(--border, #e5e5e5);">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0" style="font-size: 0.9rem; font-weight: 500;">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}" style="color: var(--text-muted, #777); text-decoration: none;">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'order_history' %}" style="color: var(--text-muted, #777); text-decoration: none;">Orders</a></li>
+                <li class="breadcrumb-item active" aria-current="page" style="color: var(--theme, #BD844C);">Confirmation #{{ order.id }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Order Success Section Start -->
+<section class="order-success-section section-padding py-5">
+    <div class="container">
+        <div style="max-width: 680px; margin: 0 auto; text-align: center;">
+
+            <!-- Success Checkmark Circle -->
+            <div style="width: 80px; height: 80px; background: rgba(189, 132, 76, 0.12); color: var(--theme, #BD844C); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 2.5rem; border: 2px solid var(--theme, #BD844C);">
+                <i class="fa-solid fa-check"></i>
+            </div>
+
+            <span class="badge" style="background: rgba(189, 132, 76, 0.12); color: var(--theme, #BD844C); font-size: 0.85rem; font-weight: 700; padding: 6px 16px; border-radius: 30px; text-transform: uppercase; letter-spacing: 1px;">
+                Payment Confirmed
+            </span>
+
+            <h2 class="mt-3 mb-2" style="font-family: var(--font-heading, 'Jost', sans-serif); font-size: 2.3rem; font-weight: 700; color: var(--header, #010F1C);">
+                Thank You For Your Order!
+            </h2>
+            <p class="text-muted mb-4" style="font-size: 1rem;">
+                Your order <strong>#{{ order.id }}</strong> has been placed and is being prepared for shipment.
+            </p>
+
+            <!-- Order Receipt Card -->
+            <div class="checkout-single boxshado-single text-start" style="background: #fff; border: 1px solid var(--border, #eee); border-radius: 12px; padding: 2rem; box-shadow: 0 4px 25px rgba(0,0,0,0.04); margin-bottom: 2rem;">
+                <div class="d-flex justify-content-between align-items-center pb-3 mb-3" style="border-bottom: 2px solid #f0eae1;">
+                    <div>
+                        <div class="text-muted small text-uppercase fw-bold">Order Number</div>
+                        <div class="fw-bold" style="font-size: 1.25rem; color: var(--header, #010F1C);">#{{ order.id }}</div>
+                    </div>
+                    <div class="text-end">
+                        <div class="text-muted small text-uppercase fw-bold">Payment Status</div>
+                        <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-bold" style="font-size: 0.85rem;">
+                            <i class="fa-solid fa-circle-check me-1"></i> {{ order.payment_status }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Purchased Garments List -->
+                <h6 class="text-muted text-uppercase fw-bold mb-3" style="font-size: 0.85rem; letter-spacing: 0.5px;">
+                    Purchased Garments
+                </h6>
+                <div class="mb-4">
+                    {% for item in order.items.all %}
+                        <div class="d-flex align-items-center justify-content-between py-2" style="border-bottom: 1px dashed #eee;">
+                            <div class="d-flex align-items-center gap-3">
+                                <div style="width: 46px; height: 60px; border-radius: 6px; overflow: hidden; background: #faf9f7; border: 1px solid #ddd; flex-shrink: 0;">
+                                    {% if item.product.image %}
+                                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                    {% else %}
+                                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f0ede6; color: #888;">
+                                            <i class="fa-solid fa-shirt" style="font-size: 0.8rem; color: var(--theme, #BD844C);"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <div class="fw-semibold text-dark" style="font-size: 0.95rem;">{{ item.product.name }}</div>
+                                    <div class="text-muted small">Size: <span class="fw-bold text-dark">{{ item.size }}</span> &times; {{ item.quantity }}</div>
+                                </div>
+                            </div>
+                            <div class="fw-bold" style="color: var(--header, #010F1C); font-size: 1rem;">
+                                ₹{{ item.get_subtotal|floatformat:2|intcomma }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Shipping Destination Box -->
+                <div class="p-3 rounded-3 mb-4" style="background: #faf8f5; border: 1px solid #ebd9c8; font-size: 0.92rem;">
+                    <div class="fw-bold mb-1" style="color: var(--header, #010F1C);">
+                        <i class="fa-regular fa-location-dot me-1" style="color: var(--theme, #BD844C);"></i> Shipping Address:
+                    </div>
+                    <div class="text-dark">{{ order.full_name }}</div>
+                    <div class="text-muted">{{ order.address }}, {{ order.city }} - {{ order.pincode }}</div>
+                    <div class="text-muted">Contact: {{ order.phone }}</div>
+                </div>
+
+                <!-- Total Paid Line -->
+                <div class="d-flex justify-content-between align-items-baseline pt-2" style="font-family: var(--font-heading, 'Jost', sans-serif); font-size: 1.25rem; font-weight: 700; color: var(--header, #010F1C);">
+                    <span>Total Amount Paid:</span>
+                    <span style="font-size: 1.6rem; color: var(--theme, #BD844C);">₹{{ order.total_amount|floatformat:2|intcomma }}</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <a href="{% url 'order_history' %}" class="btn btn-outline-secondary rounded-pill px-4 py-2 fw-semibold" style="font-size: 0.95rem;">
+                    <i class="fa-solid fa-clock-rotate-left me-2"></i> View Past Orders
+                </a>
+                <a href="{% url 'product_list' %}" class="theme-btn" style="text-decoration: none;">
+                    <span>Continue Shopping <i class="fa-solid fa-arrow-right ms-2"></i></span>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- Order Success Section End -->
+{% endblock %}

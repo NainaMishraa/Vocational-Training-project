@@ -1,0 +1,95 @@
+{% load static %}
+<!-- Ecomas Template Footer Section -->
+<footer class="footer-section footer-bg fix">
+    <div class="container">
+        <div class="footer-widget-wrapper">
+            <div class="row g-4">
+                <!-- Col 1: Store Brand Info -->
+                <div class="col-xl-4 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".2s">
+                    <div class="single-footer-widget">
+                        <div class="widget-head">
+                            <a href="{% url 'home' %}" class="footer-logo-wordmark">
+                                ClothStore<span>.</span>
+                            </a>
+                        </div>
+                        <div class="footer-content">
+                            <div class="text">
+                                <p>Curated modern apparel for Men, Women, and Kids. Contemporary designs crafted with premium quality fabrics.</p>
+                            </div>
+                            <ul class="contact-list">
+                                <li>
+                                    <i class="fa-regular fa-envelope"></i>
+                                    <a href="mailto:support@clothstore.com">support@clothstore.com</a>
+                                </li>
+                                <li>
+                                    <i class="fa-regular fa-phone"></i>
+                                    <a href="tel:+919876543210">+91 98765 43210</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Col 2: Navigation Links -->
+                <div class="col-xl-3 col-lg-4 col-md-6 ps-lg-5 wow fadeInUp" data-wow-delay=".4s">
+                    <div class="single-footer-widget">
+                        <div class="widget-head">
+                            <h3>Navigation</h3>
+                        </div>
+                        <ul class="list-items">
+                            <li><a href="{% url 'home' %}">Home</a></li>
+                            <li><a href="{% url 'product_list' %}">Shop Catalog</a></li>
+                            <li><a href="{% url 'about' %}">About Brand</a></li>
+                            <li><a href="{% url 'contact' %}">Contact Us</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Col 3: Customer Account -->
+                <div class="col-xl-2 col-lg-4 col-md-6 ps-lg-4 wow fadeInUp" data-wow-delay=".6s">
+                    <div class="single-footer-widget">
+                        <div class="widget-head">
+                            <h3>Account</h3>
+                        </div>
+                        <ul class="list-items">
+                            <li><a href="{% url 'cart_view' %}">Shopping Cart</a></li>
+                            <li><a href="{% url 'order_history' %}">My Orders</a></li>
+                            {% if request.user.is_authenticated %}
+                                <li><a href="{% url 'logout' %}">Logout</a></li>
+                            {% else %}
+                                <li><a href="{% url 'login' %}">Login</a></li>
+                                <li><a href="{% url 'signup' %}">Sign Up</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Col 4: Departments -->
+                <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".8s">
+                    <div class="single-footer-widget">
+                        <div class="widget-head">
+                            <h3>Collections</h3>
+                        </div>
+                        <ul class="list-items">
+                            <li><a href="{% url 'product_list' %}?gender=Men">Men's Collection</a></li>
+                            <li><a href="{% url 'product_list' %}?gender=Women">Women's Collection</a></li>
+                            <li><a href="{% url 'product_list' %}?gender=Kids">Kids' Collection</a></li>
+                            <li><a href="{% url 'product_list' %}">New Arrivals</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="footer-wrapper d-flex justify-content-between align-items-center flex-wrap gap-2 py-3">
+                <p class="wow fadeInUp mb-0" data-wow-delay=".3s">
+                    &copy; 2026 <span>ClothStore.</span> All rights reserved.
+                </p>
+                <p class="wow fadeInUp mb-0 text-white-50" data-wow-delay=".5s" style="font-size: 13px;">
+                    Python &bull; Django &bull; Bootstrap
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>

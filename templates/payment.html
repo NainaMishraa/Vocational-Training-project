@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Demo Payment Gateway | ClothStore{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb Start -->
+<div class="breadcrumb-wrapper py-3" style="background: var(--bg-subtle, #f5f5f7); border-bottom: 1px solid var(--border, #e5e5e5);">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0" style="font-size: 0.9rem; font-weight: 500;">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}" style="color: var(--text-muted, #777); text-decoration: none;">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'cart_view' %}" style="color: var(--text-muted, #777); text-decoration: none;">Cart</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'checkout' %}" style="color: var(--text-muted, #777); text-decoration: none;">Checkout</a></li>
+                <li class="breadcrumb-item active" aria-current="page" style="color: var(--theme, #BD844C);">Demo Payment</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Payment Section Start -->
+<section class="payment-section section-padding py-5">
+    <div class="container">
+        <div style="max-width: 620px; margin: 0 auto;">
+
+            <!-- Demo Notice Banner -->
+            <div class="alert alert-warning d-flex align-items-center gap-3 p-3 rounded-3 mb-4 shadow-sm" style="border: 1px solid #ffeeba; background-color: #fff9e6; color: #856404;">
+                <div style="font-size: 1.8rem; line-height: 1;">
+                    <i class="fa-solid fa-triangle-exclamation text-warning"></i>
+                </div>
+                <div>
+                    <h6 class="mb-1 fw-bold" style="font-size: 0.95rem;">Demo Payment Gateway - Academic Simulation</h6>
+                    <p class="mb-0" style="font-size: 0.85rem; line-height: 1.4;">
+                        Do <strong>NOT</strong> enter real credit/debit card numbers or personal banking credentials. Use the pre-filled test details below.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Payment Card Container -->
+            <div class="checkout-single boxshado-single" style="background: #fff; border: 1px solid var(--border, #eee); border-radius: 12px; padding: 2.2rem; box-shadow: 0 4px 25px rgba(0,0,0,0.04);">
+                
+                <!-- Sleek Interactive Visual Card Mockup -->
+                <div class="card-mockup mb-4 p-4 rounded-3 text-white" style="background: linear-gradient(135deg, #010F1C 0%, #1a2a3a 50%, #BD844C 100%); box-shadow: 0 10px 25px rgba(1, 15, 28, 0.25); position: relative; overflow: hidden;">
+                    <div style="position: absolute; right: -20px; bottom: -20px; font-size: 10rem; color: rgba(255,255,255,0.03); pointer-events: none;">
+                        <i class="fa-solid fa-credit-card"></i>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span style="font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; color: rgba(255,255,255,0.7);">TEST DEBIT CARD</span>
+                        <span style="font-size: 1.25rem; font-weight: 900; font-style: italic; letter-spacing: 1px;">VISA</span>
+                    </div>
+
+                    <div id="previewCardNumber" style="font-family: 'Courier New', monospace; font-size: 1.35rem; letter-spacing: 3px; font-weight: 700; margin-bottom: 1.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+                        4111 2222 3333 4444
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-flex-end">
+                        <div>
+                            <div style="font-size: 0.65rem; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1px;">Cardholder</div>
+                            <div id="previewCardHolder" style="font-weight: 700; font-size: 0.95rem; letter-spacing: 0.5px;">
+                                {{ order.full_name|upper|default:"DEMO SHOPPER" }}
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <div style="font-size: 0.65rem; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1px;">Expires</div>
+                            <div id="previewCardExpiry" style="font-weight: 700; font-size: 0.95rem; font-family: monospace;">
+                                12/28
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Recap Box -->
+                <div class="d-flex justify-content-between align-items-center p-3 rounded-3 mb-4" style="background: #faf8f5; border: 1px solid #ebd9c8;">
+                    <div>
+                        <div class="text-muted" style="font-size: 0.8rem; text-transform: uppercase; font-weight: 600;">Order Reference</div>
+                        <div class="fw-bold" style="color: var(--header, #010F1C); font-size: 0.95rem;">Order #{{ order.id }} &bull; {{ order.full_name }}</div>
+                    </div>
+                    <div class="text-end">
+                        <div class="text-muted" style="font-size: 0.8rem;">Amount Due</div>
+                        <div class="fw-bold" style="color: var(--theme, #BD844C); font-size: 1.35rem;">
+                            ₹{{ order.total_amount|floatformat:2|intcomma }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form: Demo Payment -->
+                <form action="{% url 'demo_payment' order.id %}" method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="demoCardNumber" class="form-label fw-bold" style="font-size: 0.9rem; color: var(--header, #010F1C);">
+                            Card Number (Simulated)
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white" style="border-color: #ddd;"><i class="fa-regular fa-credit-card text-muted"></i></span>
+                            <input type="text" id="demoCardNumber" class="form-control" value="4111 2222 3333 4444" placeholder="•••• •••• •••• ••••" maxlength="19" required style="border-color: #ddd; font-family: monospace;">
+                        </div>
+                        <div class="form-text text-muted" style="font-size: 0.78rem;">Pre-filled with 16 test digits for simulation.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="demoCardHolder" class="form-label fw-bold" style="font-size: 0.9rem; color: var(--header, #010F1C);">
+                            Cardholder Name
+                        </label>
+                        <input type="text" id="demoCardHolder" class="form-control" value="{{ order.full_name }}" placeholder="Full Name on Card" required style="border-color: #ddd;">
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-6">
+                            <label for="demoCardExpiry" class="form-label fw-bold" style="font-size: 0.9rem; color: var(--header, #010F1C);">
+                                Expiry Date
+                            </label>
+                            <input type="text" id="demoCardExpiry" class="form-control text-center" value="12/28" placeholder="MM/YY" maxlength="5" required style="border-color: #ddd;">
+                        </div>
+                        <div class="col-6">
+                            <label for="demoCVV" class="form-label fw-bold" style="font-size: 0.9rem; color: var(--header, #010F1C);">
+                                CVV / CVC
+                            </label>
+                            <input type="password" id="demoCVV" class="form-control text-center" value="123" placeholder="123" maxlength="4" required style="border-color: #ddd;">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="theme-btn w-100 text-center justify-content-center" style="padding: 14px 20px; border: none; font-size: 1.05rem;">
+                        <span><i class="fa-solid fa-lock me-2"></i> Pay ₹{{ order.total_amount|floatformat:"-2"|intcomma }}</span>
+                    </button>
+                </form>
+
+                <div class="text-center mt-3 text-muted" style="font-size: 0.8rem;">
+                    <i class="fa-solid fa-shield-halved me-1 text-success"></i> Instant order confirmation and cart clearance upon submission.
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- Payment Section End -->
+{% endblock %}

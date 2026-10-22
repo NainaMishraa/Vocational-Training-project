@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Shop All Collections | ClothStore{% endblock %}
+
+{% block content %}
+<!-- Shop Left Sidebar Section (Ecomas shop-left-sideber.html) -->
+<section class="shop-left-sideber-section section-padding fix">
+    <div class="container">
+        <!-- Top Breadcrumbs & Page Heading -->
+        <div class="top-content mb-4">
+            <h2>Shop Apparel</h2>
+            <ul class="list d-flex gap-2 text-muted" style="list-style: none; padding: 0;">
+                <li><a href="{% url 'home' %}" class="text-muted">Home</a> &rsaquo; </li>
+                <li class="text-dark fw-semibold">Shop Catalog</li>
+            </ul>
+        </div>
+
+        <div class="product-details-wrapper">
+            <div class="row g-4">
+                <!-- 1. LEFT SIDEBAR: Filters -->
+                <div class="col-lg-3">
+                    <div class="main-sideber">
+                        <!-- Search Box Widget -->
+                        <div class="single-sidebar-widget-2 mb-4">
+                            <div class="wid-title">
+                                <h5>Search Catalog</h5>
+                            </div>
+                            <form action="{% url 'product_list' %}" method="get" class="mt-3">
+                                {% if category_slug %}<input type="hidden" name="category" value="{{ category_slug }}">{% endif %}
+                                {% if gender_filter %}<input type="hidden" name="gender" value="{{ gender_filter }}">{% endif %}
+                                {% if sort_option %}<input type="hidden" name="sort" value="{{ sort_option }}">{% endif %}
+                                <div class="input-group">
+                                    <input type="text" name="q" value="{{ search_query }}" class="form-control" placeholder="Search apparel...">
+                                    <button class="theme-btn py-2 px-3" type="submit" aria-label="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Department / Gender Filter -->
+                        <div class="single-sidebar-widget-2 mb-4">
+                            <div class="wid-title">
+                                <h5>Department</h5>
+                            </div>
+                            <ul class="sidebar-filter-list mt-3">
+                                <li>
+                                    <a href="{% url 'product_list' %}?{% if category_slug %}category={{ category_slug }}&{% endif %}{% if sort_option %}sort={{ sort_option }}&{% endif %}{% if search_query %}q={{ search_query }}&{% endif %}"
+                                       class="{% if not gender_filter %}active{% endif %}">
+                                        <span>All Departments</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'product_list' %}?gender=Men{% if category_slug %}&category={{ category_slug }}{% endif %}{% if sort_option %}&sort={{ sort_option }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}"
+                                       class="{% if gender_filter == 'Men' %}active{% endif %}">
+                                        <span>Men's Wear</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'product_list' %}?gender=Women{% if category_slug %}&category={{ category_slug }}{% endif %}{% if sort_option %}&sort={{ sort_option }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}"
+                                       class="{% if gender_filter == 'Women' %}active{% endif %}">
+                                        <span>Women's Wear</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'product_list' %}?gender=Kids{% if category_slug %}&category={{ category_slug }}{% endif %}{% if sort_option %}&sort={{ sort_option }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}"
+                                       class="{% if gender_filter == 'Kids' %}active{% endif %}">
+                                        <span>Kids' Wear</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Category Filter -->
+                        <div class="single-sidebar-widget-2 mb-4">
+                            <div class="wid-title">
+                                <h5>Categories</h5>
+                            </div>
+                            <ul class="sidebar-filter-list mt-3">
+                                <li>
+                                    <a href="{% url 'product_list' %}?{% if gender_filter %}gender={{ gender_filter }}&{% endif %}{% if sort_option %}sort={{ sort_option }}&{% endif %}{% if search_query %}q={{ search_query }}&{% endif %}"
+                                       class="{% if not category_slug %}active{% endif %}">
+                                        <span>All Categories</span>
+                                    </a>
+                                </li>
+                                {% for cat in categories %}
+                                    <li>
+                                        <a href="{% url 'product_list' %}?category={{ cat.slug }}{% if gender_filter %}&gender={{ gender_filter }}{% endif %}{% if sort_option %}&sort={{ sort_option }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}"
+                                           class="{% if category_slug == cat.slug %}active{% endif %}">
+                                            <span>{{ cat.name }}</span>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <!-- Reset Filters Button -->
+                        {% if search_query or category_slug or gender_filter or sort_option %}
+                            <div class="mt-4">
+                                <a href="{% url 'product_list' %}" class="theme-btn theme-btn-2 w-100 text-center py-2">
+                                    <i class="fa-solid fa-arrow-rotate-left me-1"></i> Reset Filters
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- 2. RIGHT MAIN CONTENT: Toolbar + Products Grid + Pagination -->
+                <div class="col-lg-9">
+                    <!-- Top Toolbar -->
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 pb-3 mb-4 border-bottom">
+                        <p class="mb-0 text-muted">
+                            Showing {{ products|length }} of {{ total_count }} product{{ total_count|pluralize }}
+                        </p>
+                        <form action="{% url 'product_list' %}" method="get" id="sortForm">
+                            {% if category_slug %}<input type="hidden" name="category" value="{{ category_slug }}">{% endif %}
+                            {% if gender_filter %}<input type="hidden" name="gender" value="{{ gender_filter }}">{% endif %}
+                            {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
+                            <div class="d-flex align-items-center gap-2">
+                                <label for="sortSelect" class="text-nowrap text-muted mb-0" style="font-size: 14px;">Sort by:</label>
+                                <select name="sort" id="sortSelect" class="form-select form-select-sm" onchange="this.form.submit();">
+                                    <option value="" {% if not sort_option %}selected{% endif %}>Newest First</option>
+                                    <option value="price_low" {% if sort_option == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                                    <option value="price_high" {% if sort_option == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Products Grid -->
+                    <div class="row g-4">
+                        {% for product in products %}
+                            <div class="col-xl-4 col-md-6 wow fadeInUp" data-wow-delay=".2s">
+                                <div class="product-card-item">
+                                    <div class="product-image">
+                                        {% if product.stock <= 3 and product.stock > 0 %}
+                                            <span class="product-badge-stock">Only {{ product.stock }} Left</span>
+                                        {% elif product.stock == 0 %}
+                                            <span class="product-badge-stock sold-out">Sold Out</span>
+                                        {% endif %}
+                                        <span class="product-badge-tag">{{ product.gender }}</span>
+
+                                        {% if product.image %}
+                                            <a href="{% url 'product_detail' product.slug %}">
+                                                <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+                                            </a>
+                                        {% else %}
+                                            <div class="product-img-fallback">
+                                                <i class="fa-sharp fa-regular fa-bag-shopping"></i>
+                                                <span>{{ product.name }}</span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="product-content">
+                                        <p class="text-uppercase text-muted" style="font-size: 12px; margin-bottom: 4px;">{{ product.category.name }} &bull; Size {{ product.size }}</p>
+                                        <h4>
+                                            <a href="{% url 'product_detail' product.slug %}">{{ product.name }}</a>
+                                        </h4>
+                                        <div class="d-flex align-items-center justify-content-between mt-2">
+                                            <span class="price-val fw-bold" style="font-size: 18px; color: var(--header);">₹{{ product.price|floatformat:2|intcomma }}</span>
+                                            <a href="{% url 'product_detail' product.slug %}" class="link-btn-2 text-decoration-none">
+                                                View <i class="fa-solid fa-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <div class="col-12 text-center py-5">
+                                <div class="p-5 bg-white border" style="border-radius: 6px;">
+                                    <i class="fa-regular fa-magnifying-glass fa-3x text-muted mb-3"></i>
+                                    <h4>No apparel matches your selection</h4>
+                                    <p class="text-muted">Try adjusting your filters or search terms.</p>
+                                    <a href="{% url 'product_list' %}" class="theme-btn mt-3"><span>Browse All Products</span></a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Pagination -->
+                    {% if page_obj.has_other_pages %}
+                        <ul class="ecomas-pagination">
+                            {% if page_obj.has_previous %}
+                                <li>
+                                    <a href="?page={{ page_obj.previous_page_number }}{% if category_slug %}&category={{ category_slug }}{% endif %}{% if gender_filter %}&gender={{ gender_filter }}{% endif %}{% if sort_option %}&sort={{ sort_option }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" aria-label="Previous">
+                                        <i class="fa-solid fa-chevron-left"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                    <li class="active"><span>{{ num }}</span></li>
+                                {% else %}
+                                    <li>
+                                        <a href="?page={{ num }}{% if category_slug %}&category={{ category_slug }}{% endif %}{% if gender_filter %}&gender={{ gender_filter }}{% endif %}{% if sort_option %}&sort={{ sort_option }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}">{{ num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <li>
+                                    <a href="?page={{ page_obj.next_page_number }}{% if category_slug %}&category={{ category_slug }}{% endif %}{% if gender_filter %}&gender={{ gender_filter }}{% endif %}{% if sort_option %}&sort={{ sort_option }}{% endif %}{% if search_query %}&q={{ search_query }}{% endif %}" aria-label="Next">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

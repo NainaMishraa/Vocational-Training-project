@@ -1,0 +1,186 @@
+{% load static %}
+<!-- Offcanvas Mobile Navigation Menu -->
+<div class="fix-area">
+    <div class="offcanvas__info">
+        <div class="offcanvas__wrapper">
+            <div class="offcanvas__content">
+                <div class="offcanvas__top mb-4 d-flex justify-content-between align-items-center">
+                    <div class="offcanvas__logo">
+                        <a href="{% url 'home' %}" class="header-logo-wordmark">
+                            ClothStore<span>.</span>
+                        </a>
+                    </div>
+                    <div class="offcanvas__close">
+                        <button type="button" aria-label="Close menu">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="mobile-menu fix mb-3"></div>
+                <div class="offcanvas__contact">
+                    <h4>Customer Care</h4>
+                    <ul>
+                        <li class="d-flex align-items-center mb-2">
+                            <div class="offcanvas__contact-icon me-2">
+                                <i class="fa-regular fa-envelope"></i>
+                            </div>
+                            <div class="offcanvas__contact-text">
+                                <a href="mailto:support@clothstore.com">support@clothstore.com</a>
+                            </div>
+                        </li>
+                        <li class="d-flex align-items-center mb-2">
+                            <div class="offcanvas__contact-icon me-2">
+                                <i class="fa-regular fa-phone"></i>
+                            </div>
+                            <div class="offcanvas__contact-text">
+                                <a href="tel:+919876543210">+91 98765 43210</a>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="header-button mt-4">
+                        {% if request.user.is_authenticated %}
+                        <a href="{% url 'order_history' %}" class="theme-btn w-100 mb-2"><span>My Orders</span></a>
+                        <a href="{% url 'logout' %}" class="theme-btn theme-btn-2 w-100"><span>Logout ({{
+                                request.user.username }})</span></a>
+                        {% else %}
+                        <a href="{% url 'login' %}" class="theme-btn w-100 mb-2"><span>Login</span></a>
+                        <a href="{% url 'signup' %}" class="theme-btn theme-btn-2 w-100"><span>Sign Up</span></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="offcanvas__overlay"></div>
+
+<!-- Search Popup Overlay -->
+<div class="search-wrap">
+    <div class="search-inner">
+        <i class="fas fa-times search-close" id="search-close"></i>
+        <div class="search-cell">
+            <form method="get" action="{% url 'product_list' %}">
+                <div class="search-field-holder">
+                    <input type="search" name="q" class="main-search-input"
+                        placeholder="Search for clothing, shirts, denim...">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Header Top Bar -->
+<div class="header-top-section">
+    <div class="container-fluid px-lg-5">
+        <div class="header-top-wrapper header-3">
+            <ul class="contact-list">
+                <li>
+                    <i class="fa-regular fa-envelope"></i>
+                    <a href="mailto:support@clothstore.com">support@clothstore.com</a>
+                </li>
+                <li>
+                    <i class="fa-solid fa-phone"></i>
+                    <a href="tel:+919876543210">+91 98765 43210</a>
+                </li>
+            </ul>
+            <div class="flag-wrapper">
+                <div class="content d-flex align-items-center gap-3">
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url 'order_history' %}" class="account-text d-flex align-items-center gap-2">
+                        <i class="fa-regular fa-user"></i>
+                        Hello, {{ request.user.username }}
+                    </a>
+                    <a href="{% url 'order_history' %}" class="account-text">My Orders</a>
+                    <a href="{% url 'logout' %}" class="account-text">Logout</a>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="account-text d-flex align-items-center gap-2">
+                        <i class="fa-regular fa-user"></i>
+                        Log in
+                    </a>
+                    <a href="{% url 'signup' %}" class="account-text">Sign Up</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Sticky Header -->
+<header id="header-sticky" class="header-1">
+    <div class="container-fluid px-lg-5">
+        <div class="mega-menu-wrapper">
+            <div class="header-main d-flex align-items-center justify-content-between">
+                <!-- Wordmark Brand Logo -->
+                <div class="logo">
+                    <a href="{% url 'home' %}" class="header-logo-wordmark">
+                        ClothStore<span>.</span>
+                    </a>
+                </div>
+
+                <!-- Main Desktop Navigation -->
+                <div class="mean__menu-wrapper">
+                    <div class="main-menu">
+                        <nav id="mobile-menu" style="display: block;">
+                            <ul>
+                                <li class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                                    <a href="{% url 'home' %}">Home</a>
+                                </li>
+                                <li
+                                    class="has-dropdown {% if request.resolver_match.url_name == 'product_list' or request.resolver_match.url_name == 'product_detail' %}active{% endif %}">
+                                    <a href="{% url 'product_list' %}">
+                                        Shop
+                                        <i class="fa-solid fa-chevron-down"></i>
+                                    </a>
+                                    <ul class="submenu">
+                                        <li><a href="{% url 'product_list' %}">All Apparel</a></li>
+                                        <li><a href="{% url 'product_list' %}?gender=Men">Men's Wear</a></li>
+                                        <li><a href="{% url 'product_list' %}?gender=Women">Women's Wear</a></li>
+                                        <li><a href="{% url 'product_list' %}?gender=Kids">Kids' Wear</a></li>
+                                    </ul>
+                                </li>
+                                <li class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}">
+                                    <a href="{% url 'about' %}">About</a>
+                                </li>
+                                <li class="{% if request.resolver_match.url_name == 'contact' %}active{% endif %}">
+                                    <a href="{% url 'contact' %}">Contact</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Header Actions (Search + Cart + Mobile Hamburger) -->
+                <div class="header-right d-flex justify-content-end align-items-center">
+                    <!-- Inline Search Widget -->
+                    <div class="search-widget d-none d-lg-block">
+                        <form action="{% url 'product_list' %}" method="get">
+                            <input type="text" name="q" placeholder="Search apparel..." value="{{ request.GET.q }}">
+                            <button type="submit" aria-label="Search"><i
+                                    class="fa-solid fa-magnifying-glass"></i></button>
+                        </form>
+                    </div>
+
+                    <!-- Mobile Search Trigger Icon -->
+                    <a href="#0" class="search-trigger search-icon style-2 d-lg-none" aria-label="Open search">
+                        <i class="fa-regular fa-magnifying-glass"></i>
+                    </a>
+
+                    <!-- Shopping Cart Icon with Live Badge -->
+                    <div class="menu-cart ms-3">
+                        <a href="{% url 'cart_view' %}" class="cart-icon position-relative" title="View Cart">
+                            <i class="fa-sharp fa-regular fa-bag-shopping"></i>
+                            <span class="number">{{ cart_item_count|default:"0" }}</span>
+                        </a>
+                    </div>
+
+                    <!-- Mobile Sidebar Toggle -->
+                    <div class="header__hamburger d-xl-none my-auto ms-3">
+                        <div class="sidebar__toggle" role="button" aria-label="Open navigation menu">
+                            <i class="fas fa-bars"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}ClothStore | Modern Fashion & Contemporary Apparel{% endblock %}
+
+{% block content %}
+<!-- 1. Hero Section (Home 01 Layout) -->
+<section class="hero-section hero-1 fix hero-bg py-5">
+    <div class="container">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <div class="hero-content">
+                    <h6 class="sub-title wow fadeInUp" data-wow-delay=".2s">NEW SEASON 2026 COLLECTION</h6>
+                    <h1 class="wow fadeInUp" data-wow-delay=".4s">
+                        Elevate Your Everyday Style &amp; Comfort
+                    </h1>
+                    <div class="d-flex flex-wrap gap-3 mt-4 mb-4 wow fadeInUp" data-wow-delay=".6s">
+                        <a href="{% url 'product_list' %}" class="theme-btn">
+                            <span>Shop Collection <i class="fa-solid fa-arrow-right"></i></span>
+                        </a>
+                        <a href="{% url 'product_list' %}?gender=Women" class="theme-btn theme-btn-2">
+                            <span>Women's Edit</span>
+                        </a>
+                        <a href="{% url 'product_list' %}?gender=Men" class="theme-btn theme-btn-2">
+                            <span>Men's Edit</span>
+                        </a>
+                    </div>
+                    <p class="wow fadeInUp" data-wow-delay=".8s">
+                        Discover sustainably tailored apparel crafted from premium cotton, durable denim, and breathable knits. Contemporary silhouettes designed for effortless versatility.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center">
+                {% if new_arrivals and new_arrivals.0.image %}
+                    <div class="hero-product-preview wow fadeInUp" data-wow-delay=".5s">
+                        <a href="{% url 'product_detail' new_arrivals.0.slug %}">
+                            <img src="{{ new_arrivals.0.image.url }}" alt="{{ new_arrivals.0.name }}" loading="lazy">
+                        </a>
+                        <div class="p-3 bg-white text-start border-top">
+                            <span class="text-uppercase text-muted" style="font-size: 11px; letter-spacing: 1px; font-weight: 600;">Featured Highlight</span>
+                            <h5 class="mb-1 text-truncate">
+                                <a href="{% url 'product_detail' new_arrivals.0.slug %}" class="text-dark">{{ new_arrivals.0.name }}</a>
+                            </h5>
+                            <div class="fw-bold" style="color: var(--theme); font-size: 18px;">
+                                ₹{{ new_arrivals.0.price|floatformat:2|intcomma }}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 2. Four Feature Benefits Strip -->
+<section class="feature-section fix section-padding pt-0 mt-5">
+    <div class="container">
+        <div class="feature-wrapper">
+            <div class="feature-item wow fadeInUp" data-wow-delay=".2s">
+                <div class="icon">
+                    <i class="fa-solid fa-truck-fast"></i>
+                </div>
+                <div class="content">
+                    <h6>Free Delivery</h6>
+                    <p>On all domestic orders</p>
+                </div>
+            </div>
+            <div class="feature-item wow fadeInUp" data-wow-delay=".4s">
+                <div class="icon">
+                    <i class="fa-solid fa-arrow-rotate-left"></i>
+                </div>
+                <div class="content">
+                    <h6>Easy Returns</h6>
+                    <p>30-day return guarantee</p>
+                </div>
+            </div>
+            <div class="feature-item wow fadeInUp" data-wow-delay=".6s">
+                <div class="icon">
+                    <i class="fa-solid fa-tags"></i>
+                </div>
+                <div class="content">
+                    <h6>Best Value</h6>
+                    <p>Fair, transparent pricing</p>
+                </div>
+            </div>
+            <div class="feature-item wow fadeInUp" data-wow-delay=".8s">
+                <div class="icon">
+                    <i class="fa-solid fa-headset"></i>
+                </div>
+                <div class="content">
+                    <h6>Support 24/7</h6>
+                    <p>Dedicated customer support</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 3. Category Showcase Section -->
+<section class="shop-section section-padding fix section-bg">
+    <div class="container custom-container">
+        <div class="section-title text-center mb-5">
+            <h6 class="sub-title wow fadeInUp">Curated Styles</h6>
+            <h2 class="wow fadeInUp" data-wow-delay=".3s">Explore by Category</h2>
+        </div>
+        <div class="row g-4 justify-content-center">
+            {% for cat in categories %}
+                <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".{{ forloop.counter|add:1 }}s">
+                    <div class="shop-box-item text-center p-4 bg-white border" style="border-radius: 6px;">
+                        <div class="content">
+                            <div class="mb-3" style="font-size: 32px; color: var(--theme);">
+                                <i class="fa-sharp fa-regular fa-shirt"></i>
+                            </div>
+                            <h4>
+                                <a href="{% url 'product_list' %}?category={{ cat.slug }}">{{ cat.name }}</a>
+                            </h4>
+                            <p class="text-muted mt-2 mb-3">Explore our curated selection in {{ cat.name|lower }}.</p>
+                            <a href="{% url 'product_list' %}?category={{ cat.slug }}" class="theme-btn theme-btn-2 py-2 px-3" style="font-size: 13px;">
+                                View Collection <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center text-muted">
+                    <p>No categories available yet.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- 4. Featured / New Arrivals Product Grid -->
+<section class="product-section section-padding fix">
+    <div class="container">
+        <div class="section-title-area d-flex justify-content-between align-items-end flex-wrap mb-5 gap-3">
+            <div class="section-title wow fadeInUp">
+                <h6 class="sub-title">Fresh in Stock</h6>
+                <h2 class="wow fadeInUp" data-wow-delay=".3s">Featured New Arrivals</h2>
+            </div>
+            <div>
+                <a href="{% url 'product_list' %}" class="theme-btn">
+                    <span>View All Apparel <i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+            </div>
+        </div>
+        <div class="row g-4">
+            {% for product in new_arrivals %}
+                <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay=".2s">
+                    <div class="product-card-item">
+                        <div class="product-image">
+                            {% if product.stock <= 3 and product.stock > 0 %}
+                                <span class="product-badge-stock">Only {{ product.stock }} Left</span>
+                            {% elif product.stock == 0 %}
+                                <span class="product-badge-stock sold-out">Sold Out</span>
+                            {% endif %}
+                            <span class="product-badge-tag">{{ product.gender }}</span>
+
+                            {% if product.image %}
+                                <a href="{% url 'product_detail' product.slug %}">
+                                    <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+                                </a>
+                            {% else %}
+                                <div class="product-img-fallback">
+                                    <i class="fa-sharp fa-regular fa-bag-shopping"></i>
+                                    <span>{{ product.name }}</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="product-content">
+                            <p class="text-uppercase text-muted" style="font-size: 12px; margin-bottom: 4px;">{{ product.category.name }} &bull; Size {{ product.size }}</p>
+                            <h4>
+                                <a href="{% url 'product_detail' product.slug %}">{{ product.name }}</a>
+                            </h4>
+                            <div class="d-flex align-items-center justify-content-between mt-2">
+                                <span class="price-val fw-bold" style="font-size: 18px; color: var(--header);">₹{{ product.price|floatformat:2|intcomma }}</span>
+                                <a href="{% url 'product_detail' product.slug %}" class="link-btn-2 text-decoration-none">
+                                    Details <i class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center text-muted py-5">
+                    <p>No products available right now.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

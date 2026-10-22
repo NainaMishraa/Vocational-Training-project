@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Checkout & Shipping Details | ClothStore{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb Start -->
+<div class="breadcrumb-wrapper py-3" style="background: var(--bg-subtle, #f5f5f7); border-bottom: 1px solid var(--border, #e5e5e5);">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0" style="font-size: 0.9rem; font-weight: 500;">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}" style="color: var(--text-muted, #777); text-decoration: none;">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'cart_view' %}" style="color: var(--text-muted, #777); text-decoration: none;">Cart</a></li>
+                <li class="breadcrumb-item active" aria-current="page" style="color: var(--theme, #BD844C);">Checkout</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Checkout Section Start -->
+<section class="checkout-section fix section-padding py-5">
+    <div class="container">
+        <div class="checkout-wrapper">
+            <div class="top-content mb-4">
+                <h2 style="font-family: var(--font-heading, 'Jost', sans-serif); font-size: 2.2rem; font-weight: 700; color: var(--header, #010F1C);">
+                    Delivery &amp; Shipping Details
+                </h2>
+                <p class="text-muted" style="font-size: 0.95rem;">
+                    Please enter your destination address where your clothing package should be dispatched.
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Left: Shipping Address Form -->
+                <div class="col-lg-7">
+                    <div class="checkout-single boxshado-single" style="background: #fff; border: 1px solid var(--border, #eee); border-radius: 12px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+                        <h4 class="mb-4" style="font-family: var(--font-heading, 'Jost', sans-serif); font-weight: 700; color: var(--header, #010F1C); border-bottom: 1px solid #eee; padding-bottom: 0.75rem;">
+                            <i class="fa-regular fa-truck-ramp-box me-2" style="color: var(--theme, #BD844C);"></i> Shipping Address
+                        </h4>
+
+                        <form action="{% url 'checkout' %}" method="POST">
+                            {% csrf_token %}
+
+                            <div class="row g-3">
+                                <!-- Full Name -->
+                                <div class="col-12">
+                                    <label for="id_full_name" class="form-label fw-bold" style="font-size: 0.9rem; color: var(--header, #010F1C);">
+                                        Full Name <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white" style="border-color: #ddd; color: #888;"><i class="fa-regular fa-user"></i></span>
+                                        <input type="text" name="full_name" id="id_full_name" class="form-control" value="{{ form.full_name.value|default:'' }}" required placeholder="e.g. Rahul Sharma" style="border-color: #ddd;">
+                                    </div>
+                                    {% if form.full_name.errors %}
+                                        <div class="text-danger small mt-1">{{ form.full_name.errors }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Phone Number -->
+                                <div class="col-12">
+                                    <label for="id_phone" class="form-label fw-bold" style="font-size: 0.9rem; color: var(--header, #010F1C);">
+                                        Phone Number <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white" style="border-color: #ddd; color: #888;"><i class="fa-regular fa-phone"></i></span>
+                                        <input type="text" name="phone" id="id_phone" class="form-control" value="{{ form.phone.value|default:'' }}" required placeholder="e.g. 9876543210" style="border-color: #ddd;">
+                                    </div>
+                                    {% if form.phone.errors %}
+                                        <div class="text-danger small mt-1">{{ form.phone.errors }}</div>
+                                    {% endif %}
+                                    <div class="text-muted small mt-1">Used for courier delivery notifications and status SMS.</div>
+                                </div>
+
+                                <!-- Street Address -->
+                                <div class="col-12">
+                                    <label for="id_address" class="form-label fw-bold" style="font-size: 0.9rem; color: var(--header, #010F1C);">
+                                        Street Address &amp; Apartment / Flat <span class="text-danger">*</span>
+                                    </label>
+                                    <textarea name="address" id="id_address" rows="3" class="form-control" required placeholder="Flat No., House No., Building Name, Street, Landmark" style="border-color: #ddd;">{{ form.address.value|default:'' }}</textarea>
+                                    {% if form.address.errors %}
+                                        <div class="text-danger small mt-1">{{ form.address.errors }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <!-- City & PIN Code -->
+                                <div class="col-md-6">
+                                    <label for="id_city" class="form-label fw-bold" style="font-size: 0.9rem; color: var(--header, #010F1C);">
+                                        City / Town <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" name="city" id="id_city" class="form-control" value="{{ form.city.value|default:'' }}" required placeholder="e.g. Mumbai" style="border-color: #ddd;">
+                                    {% if form.city.errors %}
+                                        <div class="text-danger small mt-1">{{ form.city.errors }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="id_pincode" class="form-label fw-bold" style="font-size: 0.9rem; color: var(--header, #010F1C);">
+                                        Postal / PIN Code <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" name="pincode" id="id_pincode" class="form-control" value="{{ form.pincode.value|default:'' }}" required placeholder="e.g. 400001" style="border-color: #ddd;">
+                                    {% if form.pincode.errors %}
+                                        <div class="text-danger small mt-1">{{ form.pincode.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-3 border-top">
+                                <button type="submit" class="theme-btn w-100 text-center justify-content-center" style="padding: 14px 24px; border: none;">
+                                    <span>Continue to Demo Payment <i class="fa-solid fa-arrow-right ms-2"></i></span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Right: Order Summary Sidebar -->
+                <div class="col-lg-5">
+                    <div class="checkout-order-area" style="background: #faf8f5; border: 1px solid #ebd9c8; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
+                        <h4 class="mb-4" style="font-family: var(--font-heading, 'Jost', sans-serif); font-size: 1.35rem; font-weight: 700; color: var(--header, #010F1C); border-bottom: 2px solid #ebd9c8; padding-bottom: 0.75rem;">
+                            Your Order Items ({{ cart.get_total_count }})
+                        </h4>
+
+                        <!-- Items Scroll list -->
+                        <div class="cart-items-preview mb-4" style="max-height: 290px; overflow-y: auto; padding-right: 0.5rem;">
+                            {% for item in cart_items %}
+                                <div class="d-flex align-items-center gap-3 pb-3 mb-3" style="border-bottom: 1px solid #ebd9c8;">
+                                    <div style="width: 50px; height: 65px; border-radius: 6px; overflow: hidden; background: #fff; border: 1px solid #ddd; flex-shrink: 0;">
+                                        {% if item.product.image %}
+                                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                        {% else %}
+                                            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f0ede6; color: #888;">
+                                                <i class="fa-solid fa-shirt" style="font-size: 0.8rem; color: var(--theme, #BD844C);"></i>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <div class="fw-semibold text-dark" style="font-size: 0.92rem; line-height: 1.3;">{{ item.product.name }}</div>
+                                        <div class="text-muted" style="font-size: 0.8rem;">
+                                            Size: <span class="fw-bold text-dark">{{ item.size }}</span> &bull; Qty: {{ item.quantity }}
+                                        </div>
+                                    </div>
+                                    <div class="fw-bold text-end" style="color: var(--header, #010F1C); font-size: 0.95rem;">
+                                        ₹{{ item.get_subtotal|floatformat:2|intcomma }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Price summary lines -->
+                        <div class="d-flex justify-content-between mb-2 text-muted" style="font-size: 0.92rem;">
+                            <span>Items Subtotal</span>
+                            <span class="fw-semibold text-dark">₹{{ subtotal|floatformat:2|intcomma }}</span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-3 text-muted" style="font-size: 0.92rem;">
+                            <span>Shipping</span>
+                            <span>
+                                {% if shipping == 0 %}
+                                    <span class="badge bg-success-subtle text-success fw-bold">FREE</span>
+                                {% else %}
+                                    <span class="fw-semibold text-dark">₹{{ shipping|floatformat:2|intcomma }}</span>
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <div class="d-flex justify-content-between py-3 my-3 border-top border-bottom" style="font-family: var(--font-heading, 'Jost', sans-serif); font-size: 1.3rem; font-weight: 700; color: var(--header, #010F1C);">
+                            <span>Amount to Pay</span>
+                            <span style="color: var(--theme, #BD844C);">₹{{ grand_total|floatformat:2|intcomma }}</span>
+                        </div>
+
+                        <div class="p-3 rounded-2" style="background: rgba(189, 132, 76, 0.08); font-size: 0.83rem; color: #555;">
+                            <div class="fw-bold mb-1" style="color: var(--theme, #BD844C);">
+                                <i class="fa-solid fa-shield-check me-1"></i> Simulated Demo Checkout
+                            </div>
+                            Next step is a sandbox payment simulation. No actual bank charge or financial transaction will take place.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Checkout Section End -->
+{% endblock %}

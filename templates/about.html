@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About Us | ClothStore Story & Craftsmanship{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb Start -->
+<div class="breadcrumb-wrapper py-3" style="background: var(--bg-subtle, #f5f5f7); border-bottom: 1px solid var(--border, #e5e5e5);">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0" style="font-size: 0.9rem; font-weight: 500;">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}" style="color: var(--text-muted, #777); text-decoration: none;">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page" style="color: var(--theme, #BD844C);">About Us</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- About Hero Section Start -->
+<section class="about-section section-padding py-5">
+    <div class="container">
+        <div class="text-center mb-5" style="max-width: 780px; margin: 0 auto;">
+            <span class="badge mb-3" style="background: rgba(189, 132, 76, 0.12); color: var(--theme, #BD844C); font-size: 0.85rem; font-weight: 700; padding: 6px 18px; border-radius: 30px; text-transform: uppercase; letter-spacing: 1.5px;">
+                Our Philosophy
+            </span>
+            <h1 style="font-family: var(--font-heading, 'Jost', sans-serif); font-size: 2.8rem; font-weight: 700; color: var(--header, #010F1C); line-height: 1.25; margin-bottom: 1.2rem;">
+                Crafting Timeless Style With Modern Simplicity
+            </h1>
+            <p class="text-muted" style="font-size: 1.1rem; line-height: 1.8;">
+                ClothStore was founded on the belief that everyday clothing should balance refined aesthetics, durable materials, and effortless comfort for Men, Women, and Kids.
+            </p>
+        </div>
+
+        <!-- 3 Core Values Grid -->
+        <div class="row g-4 mb-5">
+            <div class="col-lg-4 col-md-6">
+                <div class="p-4 rounded-3 h-100" style="background: #fff; border: 1px solid var(--border, #eee); box-shadow: 0 4px 20px rgba(0,0,0,0.03); transition: transform 0.25s ease;">
+                    <div style="width: 56px; height: 56px; border-radius: 10px; background: rgba(189, 132, 76, 0.1); color: var(--theme, #BD844C); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">
+                        <i class="fa-solid fa-leaf"></i>
+                    </div>
+                    <h4 style="font-family: var(--font-heading, 'Jost', sans-serif); font-size: 1.3rem; font-weight: 700; color: var(--header, #010F1C); margin-bottom: 0.75rem;">
+                        Premium Fabrics
+                    </h4>
+                    <p class="text-muted mb-0" style="font-size: 0.95rem; line-height: 1.7;">
+                        From 100% breathable combed organic cotton to flexible structured denims, our garments are chosen to last wash after wash.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="p-4 rounded-3 h-100" style="background: #fff; border: 1px solid var(--border, #eee); box-shadow: 0 4px 20px rgba(0,0,0,0.03); transition: transform 0.25s ease;">
+                    <div style="width: 56px; height: 56px; border-radius: 10px; background: rgba(189, 132, 76, 0.1); color: var(--theme, #BD844C); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">
+                        <i class="fa-solid fa-scissors"></i>
+                    </div>
+                    <h4 style="font-family: var(--font-heading, 'Jost', sans-serif); font-size: 1.3rem; font-weight: 700; color: var(--header, #010F1C); margin-bottom: 0.75rem;">
+                        Tailored Precision
+                    </h4>
+                    <p class="text-muted mb-0" style="font-size: 0.95rem; line-height: 1.7;">
+                        Every seam, hemline, and collar is designed with anatomical precision so you always look crisp and feel comfortable.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="p-4 rounded-3 h-100" style="background: #fff; border: 1px solid var(--border, #eee); box-shadow: 0 4px 20px rgba(0,0,0,0.03); transition: transform 0.25s ease;">
+                    <div style="width: 56px; height: 56px; border-radius: 10px; background: rgba(189, 132, 76, 0.1); color: var(--theme, #BD844C); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h4 style="font-family: var(--font-heading, 'Jost', sans-serif); font-size: 1.3rem; font-weight: 700; color: var(--header, #010F1C); margin-bottom: 0.75rem;">
+                        Seamless Experience
+                    </h4>
+                    <p class="text-muted mb-0" style="font-size: 0.95rem; line-height: 1.7;">
+                        Built on Django's battle-tested architecture, featuring instant catalog search, responsive layout, and rapid checkout.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Academic Evaluation Callout -->
+        <div class="p-4 p-md-5 rounded-3 text-center my-4" style="background: #faf8f5; border: 1px solid #ebd9c8; max-width: 880px; margin: 0 auto;">
+            <h3 style="font-family: var(--font-heading, 'Jost', sans-serif); font-size: 1.8rem; font-weight: 700; color: var(--header, #010F1C); margin-bottom: 1rem;">
+                Project Evaluation &amp; Architecture Overview
+            </h3>
+            <p class="text-muted" style="font-size: 1rem; line-height: 1.8; max-width: 720px; margin: 0 auto 2rem;">
+                This web application demonstrates the fundamental principles of Python and Django:
+                Model-View-Template architecture, ORM queries (all, filter, get, exclude, select_related),
+                forms validation, CSRF protection, authentication, and database-backed relational carts.
+            </p>
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <a href="{% url 'product_list' %}" class="theme-btn" style="text-decoration: none;">
+                    <span>Explore Catalog <i class="fa-solid fa-arrow-right ms-2"></i></span>
+                </a>
+                <a href="{% url 'contact' %}" class="btn btn-outline-secondary rounded-pill px-4 py-2 fw-semibold" style="font-size: 0.95rem;">
+                    Contact Our Team
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- About Hero Section End -->
+{% endblock %}

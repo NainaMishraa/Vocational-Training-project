@@ -1,0 +1,286 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}{{ product.name }} | ClothStore{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb Start -->
+<div class="breadcrumb-wrapper py-3" style="background: var(--bg-subtle, #f5f5f7); border-bottom: 1px solid var(--border, #e5e5e5);">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0" style="font-size: 0.9rem; font-weight: 500;">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}" style="color: var(--text-muted, #777); text-decoration: none;">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'product_list' %}" style="color: var(--text-muted, #777); text-decoration: none;">Shop</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'product_list' %}?category={{ product.category.slug }}" style="color: var(--text-muted, #777); text-decoration: none;">{{ product.category.name }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page" style="color: var(--theme, #BD844C);">{{ product.name }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Shop Details Section Start -->
+<section class="shop-details-section section-padding fix shop-bg py-5">
+    <div class="container">
+        <div class="shop-details-wrapper">
+            <div class="row g-5">
+                <!-- Product Image Area -->
+                <div class="col-lg-6">
+                    <div class="shop-details-image">
+                        <div class="shop-thumb" style="border-radius: 12px; overflow: hidden; background: #fdfbf9; border: 1px solid var(--border, #eee); box-shadow: 0 4px 20px rgba(0,0,0,0.04);">
+                            {% if product.image %}
+                                <div class="product-image-container" style="position: relative; width: 100%; aspect-ratio: 3/4; overflow: hidden;">
+                                    <img src="{{ product.image.url }}" alt="{{ product.name }}" id="mainProductImage" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                                </div>
+                            {% else %}
+                                <div style="aspect-ratio: 3/4; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f5f2eb; color: var(--text-muted, #888); font-weight: 600;">
+                                    <i class="fa-solid fa-shirt mb-3" style="font-size: 3rem; color: var(--theme, #BD844C); opacity: 0.5;"></i>
+                                    <span>Image Preview Not Available</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Details Information -->
+                <div class="col-lg-6">
+                    <div class="product-details-content ps-xl-3">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge" style="background: rgba(189, 132, 76, 0.12); color: var(--theme, #BD844C); font-size: 0.85rem; font-weight: 600; padding: 6px 14px; border-radius: 30px;">
+                                {{ product.get_gender_display }} &bull; {{ product.category.name }}
+                            </span>
+                            {% if product.stock > 5 %}
+                                <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill" style="font-size: 0.82rem; font-weight: 600;">
+                                    <i class="fa-solid fa-check me-1"></i> In Stock ({{ product.stock }} units)
+                                </span>
+                            {% elif product.stock > 0 %}
+                                <span class="badge bg-warning-subtle text-warning px-3 py-2 rounded-pill" style="font-size: 0.82rem; font-weight: 600;">
+                                    <i class="fa-solid fa-triangle-exclamation me-1"></i> Only {{ product.stock }} left!
+                                </span>
+                            {% else %}
+                                <span class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill" style="font-size: 0.82rem; font-weight: 600;">
+                                    <i class="fa-solid fa-xmark me-1"></i> Out of Stock
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <h2 class="mb-3" style="font-family: var(--font-heading, 'Jost', sans-serif); font-size: 2.2rem; font-weight: 700; color: var(--header, #010F1C);">
+                            {{ product.name }}
+                        </h2>
+
+                        <div class="price-list mb-3">
+                            <h3 style="font-family: var(--font-heading, 'Jost', sans-serif); color: var(--theme, #BD844C); font-size: 2rem; font-weight: 700;">
+                                ₹{{ product.price|floatformat:2|intcomma }}
+                            </h3>
+                        </div>
+
+                        <div class="product-desc mb-4" style="color: #666; font-size: 0.98rem; line-height: 1.7;">
+                            {{ product.description|linebreaks }}
+                        </div>
+
+                        <!-- Add to Cart Form -->
+                        <form action="{% url 'add_to_cart' product.id %}" method="POST" class="mt-4">
+                            {% csrf_token %}
+
+                            <!-- Size Selector -->
+                            <div class="mb-4">
+                                <label class="form-label d-block fw-bold mb-2" style="color: var(--header, #010F1C); font-size: 0.95rem;">
+                                    Select Garment Size:
+                                </label>
+                                <div class="d-flex flex-wrap gap-2">
+                                    {% for code, label in product.SIZE_CHOICES %}
+                                        <label class="size-choice-label" style="cursor: pointer; margin: 0;">
+                                            <input type="radio" name="size" value="{{ code }}" {% if code == product.size %}checked{% endif %} class="btn-check">
+                                            <span class="btn btn-outline-secondary px-3 py-2 rounded-2 fw-semibold" style="min-width: 46px; font-size: 0.9rem;">
+                                                {{ code }}
+                                            </span>
+                                        </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Quantity Selector & Actions -->
+                            <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
+                                <div>
+                                    <label for="quantity" class="form-label fw-bold mb-1 d-block" style="font-size: 0.85rem; color: #555;">Quantity</label>
+                                    <div class="input-group" style="width: 140px;">
+                                        <button class="btn btn-outline-secondary" type="button" id="btn-minus" style="border-color: #ddd;">-</button>
+                                        <input type="number" id="quantity" name="quantity" class="form-control text-center fw-bold" value="1" min="1" max="{{ product.stock|default:1 }}" {% if product.stock == 0 %}disabled{% endif %} style="border-color: #ddd;">
+                                        <button class="btn btn-outline-secondary" type="button" id="btn-plus" style="border-color: #ddd;">+</button>
+                                    </div>
+                                </div>
+
+                                <div class="flex-grow-1" style="padding-top: 1.4rem;">
+                                    {% if product.stock > 0 %}
+                                        <button type="submit" class="theme-btn w-100 text-center justify-content-center" style="padding: 14px 28px; border: none;">
+                                            <span><i class="fa-sharp fa-regular fa-bag-shopping me-2"></i> Add to Cart</span>
+                                        </button>
+                                    {% else %}
+                                        <button type="button" class="theme-btn w-100 text-center justify-content-center" disabled style="opacity: 0.55; cursor: not-allowed; padding: 14px 28px; border: none;">
+                                            <span>Currently Out of Stock</span>
+                                        </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Garment Specifications / Trust Badges -->
+                        <div class="mt-4 pt-4 border-top">
+                            <div class="row g-3">
+                                <div class="col-sm-6">
+                                    <div class="d-flex align-items-center gap-3 p-3 rounded-3" style="background: #faf8f5; border: 1px solid #f0eae1;">
+                                        <i class="fa-regular fa-truck-fast text-theme" style="font-size: 1.4rem; color: var(--theme, #BD844C);"></i>
+                                        <div>
+                                            <div class="fw-bold" style="font-size: 0.88rem; color: var(--header, #010F1C);">Free Delivery</div>
+                                            <div class="text-muted" style="font-size: 0.8rem;">On orders above ₹999</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="d-flex align-items-center gap-3 p-3 rounded-3" style="background: #faf8f5; border: 1px solid #f0eae1;">
+                                        <i class="fa-regular fa-arrow-rotate-left text-theme" style="font-size: 1.4rem; color: var(--theme, #BD844C);"></i>
+                                        <div>
+                                            <div class="fw-bold" style="font-size: 0.88rem; color: var(--header, #010F1C);">30-Day Returns</div>
+                                            <div class="text-muted" style="font-size: 0.8rem;">Hassle-free exchange</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="d-flex align-items-center gap-3 p-3 rounded-3" style="background: #faf8f5; border: 1px solid #f0eae1;">
+                                        <i class="fa-regular fa-shield-check text-theme" style="font-size: 1.4rem; color: var(--theme, #BD844C);"></i>
+                                        <div>
+                                            <div class="fw-bold" style="font-size: 0.88rem; color: var(--header, #010F1C);">100% Authentic</div>
+                                            <div class="text-muted" style="font-size: 0.8rem;">Finest quality fabrics</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="d-flex align-items-center gap-3 p-3 rounded-3" style="background: #faf8f5; border: 1px solid #f0eae1;">
+                                        <i class="fa-regular fa-credit-card text-theme" style="font-size: 1.4rem; color: var(--theme, #BD844C);"></i>
+                                        <div>
+                                            <div class="fw-bold" style="font-size: 0.88rem; color: var(--header, #010F1C);">Secure Checkout</div>
+                                            <div class="text-muted" style="font-size: 0.8rem;">Simulated demo gateway</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Products Section Start -->
+{% if related_products %}
+<section class="product-collection-section-2 section-padding pt-0 fix py-5" style="border-top: 1px solid var(--border, #eee);">
+    <div class="container">
+        <div class="section-title text-center mb-5">
+            <h6 class="sub-title mb-2" style="color: var(--theme, #BD844C); font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; font-size: 0.85rem;">
+                Complete The Look
+            </h6>
+            <h2 style="font-family: var(--font-heading, 'Jost', sans-serif); font-size: 2rem; font-weight: 700; color: var(--header, #010F1C);">
+                Related Clothing You May Like
+            </h2>
+        </div>
+
+        <div class="row g-4">
+            {% for item in related_products %}
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+                    <div class="product-card h-100 d-flex flex-column" style="background: #fff; border: 1px solid #eee; border-radius: 10px; overflow: hidden; transition: transform 0.25s ease, box-shadow 0.25s ease;">
+                        <div class="product-image-container" style="position: relative; width: 100%; aspect-ratio: 3/4; overflow: hidden; background: #faf9f7;">
+                            {% if item.image %}
+                                <a href="{% url 'product_detail' item.slug %}">
+                                    <img src="{{ item.image.url }}" alt="{{ item.name }}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease;">
+                                </a>
+                            {% else %}
+                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f0ede6; color: #888;">
+                                    <i class="fa-solid fa-shirt" style="font-size: 2rem; color: var(--theme, #BD844C); opacity: 0.5;"></i>
+                                </div>
+                            {% endif %}
+                            <div class="product-badges" style="position: absolute; top: 12px; left: 12px;">
+                                <span class="badge" style="background: var(--header, #010F1C); color: #fff; font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 4px;">
+                                    {{ item.get_gender_display }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="p-3 d-flex flex-column flex-grow-1">
+                            <span class="text-muted" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                                {{ item.category.name }}
+                            </span>
+                            <h4 class="mt-1 mb-2" style="font-family: var(--font-heading, 'Jost', sans-serif); font-size: 1.05rem; font-weight: 600;">
+                                <a href="{% url 'product_detail' item.slug %}" style="color: var(--header, #010F1C); text-decoration: none;">
+                                    {{ item.name }}
+                                </a>
+                            </h4>
+                            <div class="mt-auto d-flex align-items-center justify-content-between pt-2">
+                                <span class="fw-bold" style="font-size: 1.15rem; color: var(--theme, #BD844C);">
+                                    ₹{{ item.price|floatformat:2|intcomma }}
+                                </span>
+                                <a href="{% url 'product_detail' item.slug %}" class="btn btn-sm btn-outline-secondary rounded-pill px-3" style="font-size: 0.82rem;">
+                                    View
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const qtyInput = document.getElementById('quantity');
+    const btnMinus = document.getElementById('btn-minus');
+    const btnPlus = document.getElementById('btn-plus');
+
+    if (qtyInput && btnMinus && btnPlus) {
+        btnMinus.addEventListener('click', function() {
+            let val = parseInt(qtyInput.value) || 1;
+            if (val > 1) {
+                qtyInput.value = val - 1;
+            }
+        });
+
+        btnPlus.addEventListener('click', function() {
+            let val = parseInt(qtyInput.value) || 1;
+            let max = parseInt(qtyInput.getAttribute('max')) || 999;
+            if (val < max) {
+                qtyInput.value = val + 1;
+            }
+        });
+    }
+
+    // Size choice styling
+    const sizeRadios = document.querySelectorAll('.size-choice-label input[type="radio"]');
+    function updateSizeStyles() {
+        sizeRadios.forEach(radio => {
+            const span = radio.nextElementSibling;
+            if (radio.checked) {
+                span.classList.remove('btn-outline-secondary');
+                span.classList.add('btn-dark');
+                span.style.background = 'var(--header, #010F1C)';
+                span.style.color = '#fff';
+                span.style.borderColor = 'var(--header, #010F1C)';
+            } else {
+                span.classList.remove('btn-dark');
+                span.classList.add('btn-outline-secondary');
+                span.style.background = 'transparent';
+                span.style.color = '#555';
+                span.style.borderColor = '#ddd';
+            }
+        });
+    }
+    sizeRadios.forEach(radio => {
+        radio.addEventListener('change', updateSizeStyles);
+    });
+    updateSizeStyles();
+});
+</script>
+{% endblock %}

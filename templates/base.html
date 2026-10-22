@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ClothStore | Modern Fashion & Apparel{% endblock %}</title>
+
+    <!-- Google Fonts: Jost & Manrope (Template Typography) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS (Template) -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <!-- Font Awesome Pro 6 Icons -->
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+    <!-- Animate CSS -->
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+    <!-- MeanMenu Mobile Nav CSS -->
+    <link rel="stylesheet" href="{% static 'css/meanmenu.css' %}">
+    <!-- Swiper Carousel CSS -->
+    <link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
+    <!-- NiceSelect CSS -->
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}">
+    <!-- Ecomas Main Template CSS -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <!-- ClothStore Custom Overrides (Loaded After Template CSS) -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- Back To Top Button -->
+    <button id="back-top" class="back-to-top">
+        <i class="fa-regular fa-arrow-up"></i>
+    </button>
+
+    <!-- Custom Mouse Cursor -->
+    <div class="mouse-cursor cursor-outer"></div>
+    <div class="mouse-cursor cursor-inner"></div>
+
+    <!-- Include Header & Offcanvas Navigation -->
+    {% include "header.html" %}
+
+    <!-- Global Flash Messages Notification Banner -->
+    <div class="container mt-3">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert site-alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    <span>
+                        {% if message.tags == 'success' %}<i class="fa-solid fa-circle-check me-2 text-success"></i>{% endif %}
+                        {% if message.tags == 'error' or message.tags == 'danger' %}<i class="fa-solid fa-circle-exclamation me-2 text-danger"></i>{% endif %}
+                        {% if message.tags == 'warning' %}<i class="fa-solid fa-triangle-exclamation me-2 text-warning"></i>{% endif %}
+                        {% if message.tags == 'info' %}<i class="fa-solid fa-circle-info me-2 text-info"></i>{% endif %}
+                        {{ message }}
+                    </span>
+                    <button type="button" class="btn-close alert-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Main Dynamic Content Block -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Include Footer -->
+    {% include "footer.html" %}
+
+    <!-- Core Template JavaScript Plugins -->
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'js/viewport.jquery.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+    <script src="{% static 'js/jquery.waypoints.js' %}"></script>
+    <script src="{% static 'js/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'js/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'js/jquery.meanmenu.min.js' %}"></script>
+    <script src="{% static 'js/wow.min.js' %}"></script>
+    <!-- Template Main Interactive Script -->
+    <script src="{% static 'js/ecomas.js' %}"></script>
+    <!-- Project Utility Script (Payment Card formatting, cart confirmations) -->
+    <script src="{% static 'js/main.js' %}"></script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
