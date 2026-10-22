@@ -1,0 +1,416 @@
+/* ==============================================================================
+   CLOTHSTORE - CUSTOM STYLES & OVERRIDES FOR ECOMAS TEMPLATE
+   All colors derived directly from the Ecomas design system.
+   ============================================================================== */
+
+:root {
+    --theme: #BD844C;
+    --theme-hover: #a36f3c;
+    --header: #010F1C;
+    --text: #55585B;
+    --border: #7676764d;
+    --border-2: #BDBDBD;
+    --bg: #F7F7F7;
+    --bg-2: #F6F6F6;
+    --bg-3: #F3F7FF;
+    --white: #ffffff;
+    --black: #000000;
+}
+
+/* 1. Header Wordmark Logo */
+.header-logo-wordmark {
+    font-family: "Jost", sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--header);
+    letter-spacing: -0.5px;
+    text-transform: none;
+    text-decoration: none;
+    display: inline-block;
+    line-height: 1;
+}
+
+.header-logo-wordmark span {
+    color: var(--theme);
+}
+
+.header-logo-wordmark:hover {
+    color: var(--header);
+}
+
+.footer-logo-wordmark {
+    font-family: "Jost", sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.5px;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.footer-logo-wordmark span {
+    color: var(--theme);
+}
+
+.footer-logo-wordmark:hover {
+    color: var(--white);
+}
+
+/* 2. Product Cards & Image Display Rules */
+.product-card-item .product-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background-color: var(--bg);
+    display: block;
+}
+
+.product-card-item .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transition: transform 0.4s ease-in-out;
+}
+
+.product-card-item:hover .product-image img {
+    transform: scale(1.05);
+}
+
+.product-details-item .shop-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background-color: var(--bg);
+}
+
+.product-details-item .shop-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transition: transform 0.4s ease-in-out;
+}
+
+.product-details-item:hover .shop-image img {
+    transform: scale(1.05);
+}
+
+.product-img-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-2);
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    padding: 15px;
+}
+
+.product-img-fallback i {
+    font-size: 28px;
+    margin-bottom: 8px;
+    color: var(--theme);
+}
+
+/* Badges for stock and category */
+.product-badge-tag {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background-color: var(--header);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 10px;
+    z-index: 2;
+    border-radius: 2px;
+}
+
+.product-badge-stock {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background-color: var(--theme);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    z-index: 2;
+    border-radius: 2px;
+}
+
+.product-badge-stock.sold-out {
+    background-color: #767676;
+}
+
+/* 3. Product Detail Gallery */
+.shop-details-image .shop-thumb {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border-radius: 4px;
+    background-color: var(--bg);
+}
+
+.shop-details-image .shop-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+}
+
+/* 4. Cart & Line Items Thumbnails */
+.cart-product-thumb {
+    width: 68px;
+    aspect-ratio: 3 / 4;
+    height: auto;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+.cart-thumb-fallback {
+    width: 68px;
+    aspect-ratio: 3 / 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-2);
+    color: var(--text);
+    font-size: 10px;
+    font-weight: 600;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+/* 5. Feature Benefits Strip Icons */
+.feature-item .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 55px;
+    height: 55px;
+    font-size: 26px;
+    color: var(--theme);
+    flex-shrink: 0;
+}
+
+/* 6. Alerts & Messages */
+.site-alert {
+    border-radius: 0;
+    border: none;
+    border-left: 4px solid var(--theme);
+    background-color: var(--bg);
+    color: var(--header);
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 24px;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-alert.alert-success {
+    border-left-color: #28a745;
+    background-color: #f0fdf4;
+    color: #14532d;
+}
+
+.site-alert.alert-danger,
+.site-alert.alert-error {
+    border-left-color: #dc3545;
+    background-color: #fef2f2;
+    color: #7f1d1d;
+}
+
+.site-alert.alert-warning {
+    border-left-color: #ffc107;
+    background-color: #fffbeb;
+    color: #78350f;
+}
+
+.site-alert.alert-info {
+    border-left-color: var(--theme);
+    background-color: var(--bg-3);
+    color: var(--header);
+}
+
+.site-alert .btn-close {
+    padding: 0;
+    background-size: 10px;
+}
+
+/* 7. Hero Section with Real Product Images */
+.hero-1 .hero-product-preview {
+    max-width: 440px;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    background-color: var(--bg);
+    margin: 0 auto;
+}
+
+.hero-1 .hero-product-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+}
+
+/* 8. Demo Payment Card Styling */
+.payment-card-preview {
+    background: linear-gradient(135deg, var(--header) 0%, #1a2936 100%);
+    color: var(--white);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 30px;
+    box-shadow: 0 12px 24px rgba(1, 15, 28, 0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+.payment-card-preview::after {
+    content: "";
+    position: absolute;
+    right: -20px;
+    bottom: -20px;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: rgba(189, 132, 76, 0.15);
+    pointer-events: none;
+}
+
+.payment-card-chip {
+    width: 44px;
+    height: 32px;
+    background: linear-gradient(135deg, #d4af37 0%, #f3e5ab 100%);
+    border-radius: 4px;
+    margin-bottom: 24px;
+}
+
+.payment-card-number {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 20px;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.payment-card-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.payment-card-holder-name {
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* Notice box on payment */
+.demo-payment-notice {
+    background-color: #fffbeb;
+    border-left: 4px solid #ffc107;
+    padding: 14px 18px;
+    font-size: 14px;
+    color: #78350f;
+    margin-bottom: 24px;
+    border-radius: 2px;
+}
+
+/* 9. Pagination Styling */
+.ecomas-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin-top: 40px;
+}
+
+.ecomas-pagination li a,
+.ecomas-pagination li span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--border);
+    color: var(--header);
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s;
+    background-color: var(--white);
+}
+
+.ecomas-pagination li.active span,
+.ecomas-pagination li a:hover {
+    background-color: var(--theme);
+    color: var(--white);
+    border-color: var(--theme);
+}
+
+/* 10. Filter Sidebar Enhancements */
+.sidebar-filter-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-filter-list li {
+    margin-bottom: 10px;
+}
+
+.sidebar-filter-list li a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 4px;
+    color: var(--text);
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.sidebar-filter-list li a:hover,
+.sidebar-filter-list li a.active {
+    background-color: var(--bg);
+    color: var(--theme);
+    font-weight: 600;
+}
+
+.sidebar-filter-list li a.active {
+    border-left: 3px solid var(--theme);
+}
+
+/* Responsive tweaks */
+@media (max-width: 991px) {
+    .header-logo-wordmark {
+        font-size: 24px;
+    }
+}
