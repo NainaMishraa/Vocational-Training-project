@@ -243,6 +243,6 @@ Django uses a two-step migration system to keep your Python models in sync with 
 
 ## Django Concepts Reference
 
-This project was built to clearly demonstrate 14 core Django concepts for evaluators. For the complete reference guide mapping each concept to exact files, functions, and lines of code with plain-English explanations, read:
+For the complete reference guide mapping each concept to exact files, functions, and lines of code with plain-English explanations, read:
 
 👉 **[CONCEPTS.md](file:///d:/Projects/VT%20ecom%20project/CONCEPTS.md)**
